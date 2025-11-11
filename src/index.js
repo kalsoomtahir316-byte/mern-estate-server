@@ -20,6 +20,10 @@ export async function connectDB() {
 // test route
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
+app.get("/", (req, res) => {
+  res.send("MERN Estate Server is running successfully 🚀");
+});
+
 // export for vercel
 export default app;
 
