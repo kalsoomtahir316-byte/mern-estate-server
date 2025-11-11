@@ -1,18 +1,17 @@
 // server/src/index.js
 import express from "express";
 import cors from "cors";
-import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
+import morgan from "morgan";
 import mongoose from "mongoose";
-
+import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import listingRoutes from "./routes/listings.js";
 
 dotenv.config();
-
 const app = express();
 
+// --- DB connect (runs once on first import) ---
 let isConnected = false;
 export async function connectDB() {
   if (isConnected) return;
@@ -21,6 +20,7 @@ export async function connectDB() {
   console.log("Mongo connected");
 }
 
+// --- middleware ---
 app.use(
   cors({
     origin: (origin, cb) => {
@@ -34,22 +34,17 @@ app.use(
     credentials: true,
   })
 );
-
-app.use(express.json());
+app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-app.get("/api/health", async (_req, res) => {
-  try { await connectDB(); res.json({ ok: true }); }
-  catch (e) { res.status(500).json({ ok: false, error: e.message }); }
-});
+// health
+app.get("/api/health", (_req, res) => res.json({ ok: true }));
 
-app.use("/api/auth", async (req, res, next) => { await connectDB(); next(); }, authRoutes);
-app.use("/api/listings", async (req, res, next) => { await connectDB(); next(); }, listingRoutes);
+// routes
+app.use("/api/auth", authRoutes);
+app.use("/api/listings", listingRoutes);
 
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log("server running on " + PORT));
-}
-
+// ❗ no app.listen here (serverless export below file)
+// export default app for Vercel wrapper and dev server
 export default app;
