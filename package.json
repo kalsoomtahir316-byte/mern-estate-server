@@ -4,10 +4,10 @@
   "type": "module",
   "main": "api/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon src/dev.js",
     "start": "node api/index.js"
   },
-  "engines": { "node": "18.x" },
+  "engines": { "node": "22.x" },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
