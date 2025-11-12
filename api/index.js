@@ -1,6 +1,3 @@
-import app, { connectDB } from "../src/index.js";
-
-export default async function handler(req, res) {
-  await connectDB();      // ensure DB ready in serverless
-  return app(req, res);   // let Express handle the request
-}
+// api/index.js  (repo root par 'api' folder ke andar)
+import app from "../src/index.js";   // path bilkul yahi rahe
+export default app;                  // Express app ko Vercel ko export karo

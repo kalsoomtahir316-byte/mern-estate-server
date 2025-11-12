@@ -1,8 +1,8 @@
 {
   "version": 2,
   "engines": { "node": "22.x" },
-  "builds": [{ "src": "src/index.js", 
+  "builds": [{ "src": "api/index.js", 
   "use": "@vercel/node" }],
   "routes": [{ "src": "/(.*)", "dest":
-   "src/index.js" }]
+   "api/index.js" }]
 }
