@@ -1,36 +1,48 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
 import morgan from "morgan";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 dotenv.config();
-
 const app = express();
-app.use(cors());
+
+// Middleware
 app.use(express.json());
 app.use(morgan("dev"));
 
-export async function connectDB() {
+// CORS setup
+const DEV_ORIGIN = "http://localhost:5173";
+const PROD_ORIGIN = "https://estate-client.netlify.app";
+
+app.use(cors({
+  origin: [DEV_ORIGIN, PROD_ORIGIN],
+  credentials: false,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+app.options("*", (req, res) => res.sendStatus(200));
+
+// Test route
+app.get("/api/health", (req, res) => res.json({ ok: true }));
+
+// MongoDB connection
+const connectDB = async () => {
   if (mongoose.connection.readyState === 1) return;
   await mongoose.connect(process.env.MONGODB_URI);
   console.log("✅ MongoDB connected");
-}
+};
 
-// test route
-app.get("/api/health", (req, res) => res.json({ ok: true }));
-
-app.get("/", (req, res) => {
-  res.send("MERN Estate Server is running successfully 🚀");
-});
-
-// export for vercel
-export default app;
-
-// local run
+// Start server (for local dev only)
 if (!process.env.VERCEL) {
-  const port = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5089;
   connectDB().then(() => {
-    app.listen(port, () => console.log(`Local server running on ${port}`));
+    app.listen(PORT, () => {
+      console.log(`Server running locally on port ${PORT}`);
+    });
   });
 }
+
+// ✅ Only one export — required for Vercel
+export default app;
