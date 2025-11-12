@@ -43,6 +43,4 @@ if (!process.env.VERCEL) {
     });
   });
 }
-
-// ✅ Only one export — required for Vercel
 export default app;
