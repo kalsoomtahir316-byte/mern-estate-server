@@ -3,15 +3,18 @@ import cors from "cors";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import routes from "./routes/index.js";
 
 dotenv.config();
 const app = express();
 
-// Middleware
+
 app.use(express.json());
 app.use(morgan("dev"));
 
-// CORS setup
+app.use("/api", routes);
+
+
 const DEV_ORIGIN = "http://localhost:5173";
 const PROD_ORIGIN = "https://estate-client.netlify.app";
 
@@ -24,7 +27,7 @@ app.use(cors({
 
 app.options("*", (req, res) => res.sendStatus(200));
 
-// Test route
+
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
 // MongoDB connection
@@ -34,7 +37,7 @@ const connectDB = async () => {
   console.log("✅ MongoDB connected");
 };
 
-// Start server (for local dev only)
+
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 5089;
   connectDB().then(() => {
