@@ -16,11 +16,11 @@ app.use("/api", routes);
 
 
 const DEV_ORIGIN = "http://localhost:5173";
-const PROD_ORIGIN = "https://estate-client.netlify.app";
+const PROD_ORIGIN = "https://mern-estate-client.netlify.app/";
 
 app.use(cors({
   origin: [DEV_ORIGIN, PROD_ORIGIN],
-  credentials: false,
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
