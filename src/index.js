@@ -16,7 +16,7 @@ app.use("/api", routes);
 
 
 const DEV_ORIGIN = "http://localhost:5173";
-const PROD_ORIGIN = "https://mern-estate-client.netlify.app/";
+const PROD_ORIGIN = "https://mern-estate-phi-three.vercel.app/";
 
 app.use(cors({
   origin: [DEV_ORIGIN, PROD_ORIGIN],
@@ -37,6 +37,7 @@ const connectDB = async () => {
   console.log("✅ MongoDB connected");
 };
 
+export default app;
 
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 5089;
@@ -46,4 +47,3 @@ if (!process.env.VERCEL) {
     });
   });
 }
-export default app;
